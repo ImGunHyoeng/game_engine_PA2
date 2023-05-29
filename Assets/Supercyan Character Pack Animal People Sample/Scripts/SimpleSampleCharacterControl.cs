@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Supercyan.AnimalPeopleSample
 {
     public class SimpleSampleCharacterControl : MonoBehaviour
     {
+        time_ctr time_Ctr;
         private enum ControlMode
         {
             /// <summary>
@@ -47,6 +49,7 @@ namespace Supercyan.AnimalPeopleSample
 
         private void Awake()
         {
+            time_Ctr = GameObject.Find("Time_ctr").GetComponent<time_ctr>();
             if (!m_animator) { gameObject.GetComponent<Animator>(); }
             if (!m_rigidBody) { gameObject.GetComponent<Animator>(); }
         }
@@ -66,7 +69,27 @@ namespace Supercyan.AnimalPeopleSample
                 }
             }
         }
-
+        private void OnTriggerEnter(Collider other)
+        {
+            if(other.tag=="Clear")
+            {
+                SceneManager.LoadScene("Clear");
+                set_result.st_result=time_Ctr.get_time();
+                
+            }
+            if(other.tag=="Over")
+            {
+                SceneManager.LoadScene("Gameover");
+            }
+            if (other.tag == "Minus_time")
+            {
+                time_Ctr.minus_time(5);
+            }
+            if(other.tag=="Enemy")
+            {
+                time_Ctr.minus_time(10);
+            }
+        }
         private void OnCollisionStay(Collision collision)
         {
             ContactPoint[] contactPoints = collision.contacts;
@@ -221,4 +244,5 @@ namespace Supercyan.AnimalPeopleSample
             }
         }
     }
+    
 }
