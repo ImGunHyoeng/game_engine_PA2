@@ -7,6 +7,10 @@ namespace Supercyan.AnimalPeopleSample
     public class SimpleSampleCharacterControl : MonoBehaviour
     {
         time_ctr time_Ctr;
+        Vector3 spawn;
+        public AudioClip save;
+        AudioSource audio;
+        save_ctr_view save_ctr;
         private enum ControlMode
         {
             /// <summary>
@@ -49,9 +53,13 @@ namespace Supercyan.AnimalPeopleSample
 
         private void Awake()
         {
+            save_ctr = GameObject.Find("Save_ctr").GetComponent<save_ctr_view>();
+            audio=this.gameObject.AddComponent<AudioSource>();
+            spawn=GetComponent<Transform>().position;
             time_Ctr = GameObject.Find("Time_ctr").GetComponent<time_ctr>();
             if (!m_animator) { gameObject.GetComponent<Animator>(); }
             if (!m_rigidBody) { gameObject.GetComponent<Animator>(); }
+            audio.clip = save;
         }
 
         private void OnCollisionEnter(Collision collision)
@@ -68,14 +76,31 @@ namespace Supercyan.AnimalPeopleSample
                     m_isGrounded = true;
                 }
             }
+            if (collision.gameObject.tag == "Enemy")
+            {
+                time_Ctr.minus_time(10);
+                spawn_point();
+            }
+
         }
+        void spawn_point()
+        { transform.position = spawn; }
         private void OnTriggerEnter(Collider other)
         {
+            if(other.gameObject.tag =="Save")
+            {
+                Debug.Log(transform.position);
+                Debug.Log(spawn);
+                spawn = other.transform.position;
+                audio.Play();
+                save_ctr.save_text();
+                Destroy(other.gameObject);
+                
+            }
             if(other.tag=="Clear")
             {
                 SceneManager.LoadScene("Clear");
                 set_result.st_result=time_Ctr.get_time();
-                
             }
             if(other.tag=="Over")
             {
@@ -85,9 +110,15 @@ namespace Supercyan.AnimalPeopleSample
             {
                 time_Ctr.minus_time(5);
             }
-            if(other.tag=="Enemy")
+            if (other.tag == "Fall")
+            {
+                time_Ctr.minus_time(5);
+                spawn_point();
+            }
+            if (other.tag=="Enemy")
             {
                 time_Ctr.minus_time(10);
+                spawn_point();
             }
         }
         private void OnCollisionStay(Collision collision)
@@ -164,13 +195,16 @@ namespace Supercyan.AnimalPeopleSample
         {
             float v = Input.GetAxis("Vertical");
             float h = Input.GetAxis("Horizontal");
-
+            
             bool walk = Input.GetKey(KeyCode.LeftShift);
 
             if (v < 0)
             {
+                
                 if (walk) { v *= m_backwardsWalkScale; }
                 else { v *= m_backwardRunScale; }
+                
+                
             }
             else if (walk)
             {

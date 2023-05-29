@@ -13,10 +13,12 @@ public class Is_view_item : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        view = Instantiate(isview_gm,this.transform);
+        if (other.gameObject.tag == "Player"||other.gameObject.tag=="Grab")
+            view = Instantiate(isview_gm,this.transform);
     }
     private void OnTriggerExit(Collider other)
     {
-        Destroy(view);
+        /*if (other.gameObject.tag == "Player" || other.gameObject.tag == "Grab")
+            Destroy(view);*/
     }
 }

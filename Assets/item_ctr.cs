@@ -5,12 +5,21 @@ using UnityEngine.UI;
 
 public class item_ctr : MonoBehaviour
 {
+    AudioSource audio;
+    public AudioClip burn_ac;
+    public AudioClip bomb_ac;
+    public AudioClip bomb_effect;
+    //public AudioClip burn_effect;
+    public Pick_up up;
     select_ctr ctr;
     Light area_light;
     Slider light_slider;
     public GameObject bomb;
+    Transform player;
     private void Start()
     {
+        audio = this.gameObject.AddComponent<AudioSource>();
+        player=GameObject.Find("Player").GetComponent<Transform>();
         light_slider=GameObject.Find("light_slider").GetComponent<Slider>();
         area_light=GameObject.Find("light").GetComponent<Light>();
         ctr = GameObject.Find("Select_ctr").GetComponent<select_ctr>();
@@ -45,11 +54,29 @@ public class item_ctr : MonoBehaviour
     {
         if (ctr.get_item_name() == "Burn")
         {
+            audio.clip = burn_ac;
             area_light.range = 8;
         }
         else
         {
-
+            audio.clip = bomb_ac;
+            StartCoroutine(spawnbomb());
         }
+        audio.Play();
+    }
+    IEnumerator spawnbomb()
+    {
+        float x=Random.Range(-1f,1f);
+        float z=Random.Range(-1f,1f);
+        GameObject bom_ins = Instantiate(bomb, new Vector3(player.position.x+x,player.position.y+1f,player.position.z+z),Quaternion.Euler(Vector3.zero));
+        yield return new WaitForSeconds(4.99f);
+        //Debug.Log(bom_ins.GetComponentInChildren<Collider>().enabled);
+        //bom_ins.GetComponentInChildren<Collider>().enabled = true;
+        Debug.Log(bom_ins.transform.GetChild(0).gameObject);
+        bom_ins.transform.GetChild(0).gameObject.SetActive(true);
+        audio.clip = bomb_effect;
+        audio.Play();
+        yield return new WaitForSeconds(0.08f);
+        Destroy(bom_ins);
     }
 }

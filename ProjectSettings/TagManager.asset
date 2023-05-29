@@ -9,6 +9,11 @@ TagManager:
   - Over
   - Minus_time
   - Enemy
+  - Grab
+  - Bomb
+  - Explosion
+  - Save
+  - Fall
   layers:
   - Default
   - TransparentFX

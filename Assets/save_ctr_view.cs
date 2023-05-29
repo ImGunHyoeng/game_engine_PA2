@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class save_ctr_view : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public GameObject save_t;
+    private void Start()
     {
-        
+        //save_t = GameObject.Find("Save");
     }
-
-    // Update is called once per frame
-    void Update()
+    // Start is called before the first frame update
+    public void save_text()
     {
-        
+        StartCoroutine(save());
+    }
+    IEnumerator save()
+    {
+        save_t.SetActive(true);
+        yield return new WaitForSeconds(3f);
+        save_t.SetActive(false);
     }
 }

@@ -12,7 +12,7 @@ public class time_ctr : MonoBehaviour
     void Start()
     {
         //=GameObject.Find("Time").GetComponent<Text>();
-        time = 180f;
+        time = 200f;
         StartCoroutine(time_set());
     }
 
@@ -33,7 +33,7 @@ public class time_ctr : MonoBehaviour
         if (time <= 0)
         {
             SceneManager.LoadScene("Gameover");
-           yield return new WaitForSeconds(0.3f);
+           //yield return new WaitForSeconds(0.3f);
         }
         time_t.text = "Time : " + (int)time;
         
