@@ -23,6 +23,8 @@ public class Pick_up : MonoBehaviour
     }
     private void Update()
     {
+        
+        Debug.Log(isitem);
         if(isitem)
         {
             StartCoroutine(isPick(others_gm));
@@ -64,12 +66,13 @@ public class Pick_up : MonoBehaviour
         }
         yield return new WaitForSeconds(0.2f);
     }
-  
+    public void set_grab_bool() { isgrab = false; }
     IEnumerator grabbomb(Collision bomb)
     {
         if (bomb == null) ; //{ isgrab = false; } 
         else
-        { 
+        {
+            isgrab = true;
             bomb_ins = bomb;
             //Debug.Log(box.position);
             bomb.gameObject.transform.SetParent(player);
@@ -84,29 +87,27 @@ public class Pick_up : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.layer == 7)
-        {
-            //isbomb = true;
-        }
-        if (collision.gameObject.tag == "Bomb")
+        if (collision.gameObject.tag == "Bomb"&&isgrab==false)
         {
             StartCoroutine(grabbomb(collision));
         }
     }
 
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.layer == 7)
-        {
-            //isbomb = false;
-        }
-    }
+  
     
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Item")
         {
-            isitem=true;
+            isitem = true;
+            others_gm = other.gameObject;
+        }
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "Item")
+        {
+            isitem = true;
             others_gm = other.gameObject;
         }
     }

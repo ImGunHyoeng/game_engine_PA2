@@ -38,9 +38,11 @@ public class item_ctr : MonoBehaviour
     }
     IEnumerator light_down()
     {
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(0.7f);
         if (area_light.range < 3)
-        {  }
+        {  
+            light_slider.value = 0;
+        }
         else
         {
             area_light.range -=Time.deltaTime*3;
@@ -72,8 +74,9 @@ public class item_ctr : MonoBehaviour
         yield return new WaitForSeconds(4.99f);
         //Debug.Log(bom_ins.GetComponentInChildren<Collider>().enabled);
         //bom_ins.GetComponentInChildren<Collider>().enabled = true;
-        Debug.Log(bom_ins.transform.GetChild(0).gameObject);
+        //Debug.Log(bom_ins.transform.GetChild(0).gameObject);
         bom_ins.transform.GetChild(0).gameObject.SetActive(true);
+        up.set_grab_bool();
         audio.clip = bomb_effect;
         audio.Play();
         yield return new WaitForSeconds(0.08f);

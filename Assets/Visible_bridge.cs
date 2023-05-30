@@ -12,7 +12,7 @@ public class Visible_bridge : MonoBehaviour
     {
         audio = this.gameObject.AddComponent<AudioSource>();
         audio.clip = sc;
-        audio.volume = 0.4f;
+        audio.volume = 0.3f;
     }
     private void OnTriggerEnter(Collider other)
     {
